@@ -1,0 +1,77 @@
+Output for: TH-232-2, TH-229-9, Pa-229 (117 keV), T6  
+
+CLSQ2 output creation time: 2015-07-20 11:51:00.958321
+
+ ----- INPUT DATA FROM FILE ----- 
+
+   DAY    HR     MIN       COUNTS      DELTA_T     BGND    SBGND    SIGPCT  TYPE-FWHM  ENERGY       ID1       ID2       CPM   
+    2	   8	  7.60	      736	    10.0	   0.00	   0.00	     0.0	 	        0.0	 						     73.60
+    3	   7	 44.50	     1470	    30.0	   0.00	   0.00	     0.0	 	        0.0	 						     49.00
+    4	  13	 41.20	      795	    30.0	   0.00	   0.00	     0.0	 	        0.0	 						     26.50
+    6	   4	 33.00	     2300	   120.0	   0.00	   0.00	     0.0	 	        0.0	 						     19.17
+
+
+ ----- START OF CALCULATED OUTPUT ----- 
+
+
+
+NP = 4 ,  NC = 1 ,  NV = 0 ,  CNV = 0.05 ,  BGD =   0.00 ,  SBGD =  0.00 ,  BLOCK =  5.0 ,  SCOFF = 0.5 ,  RJT =  6.0 ,  KCS = 0 ,  YIELD =  0.000 
+
+             HALF LIFE     SIGMA H     CPM AT EOB     SIGMA EOB CPM    DECAY FACTOR 
+ COMP( 1)	   1.400 D	   0.000 D	   2.8598E+02	   4.0454E+00	   3.1886E+00
+
+
+    FIT =   9.993  ,  R-squared = 0.9594
+
+       T(I)            F(I)            FCALC(I)        V(I)            SIGMAF(I)        RATIO(I) 
+       3.3726E+03	   7.3600E+01	   8.9688E+01	  -1.6088E+01	   2.7148E+00	    -5.93
+       4.7995E+03	   4.9000E+01	   5.4912E+01	  -5.9123E+00	   1.2785E+00	    -4.62
+       6.5962E+03	   2.6500E+01	   2.9606E+01	  -3.1064E+00	   9.4045E-01	    -3.30
+       8.9730E+03	   1.9167E+01	   1.3076E+01	   6.0905E+00	   3.9974E-01	    15.24
+
+ Data points rejected,   1 are given below. 
+     Bad T           Bad F 
+  8.9730E+03 	   1.9167E+01 
+Repeat calculation without these points.
+
+
+
+NP = 3 ,  NC = 1 ,  NV = 0 ,  CNV = 0.05 ,  BGD =   0.00 ,  SBGD =  0.00 ,  BLOCK =  5.0 ,  SCOFF = 0.5 ,  RJT =  6.0 ,  KCS = 0 ,  YIELD =  0.000 
+
+             HALF LIFE     SIGMA H     CPM AT EOB     SIGMA EOB CPM    DECAY FACTOR 
+ COMP( 1)	   1.400 D	   0.000 D	   2.4969E+02	   4.5633E+00	   3.1886E+00
+
+
+    FIT =   1.443  ,  R-squared = 0.9971
+
+       T(I)            F(I)            FCALC(I)        V(I)            SIGMAF(I)        RATIO(I) 
+       3.3726E+03	   7.3600E+01	   7.8307E+01	  -4.7062E+00	   2.7148E+00	    -1.73
+       4.7995E+03	   4.9000E+01	   4.7944E+01	   1.0563E+00	   1.2785E+00	     0.83
+       6.5962E+03	   2.6500E+01	   2.5849E+01	   6.5073E-01	   9.4045E-01	     0.69
+
+ All data points okay. None meet rejection criteria. 
+
+
+
+NP = 3 ,  NC = 1 ,  NV = 1 ,  CNV = 0.05 ,  BGD =   0.00 ,  SBGD =  0.00 ,  BLOCK =  5.0 ,  SCOFF = 0.5 ,  RJT =  6.0 ,  KCS = 0 ,  YIELD =  0.000 
+
+Iterations performed =  3 ,     CONVERGENT 
+
+
+              1ST COMP        2ND COMP        3RD COMP        4TH COMP        5TH COMP 
+    D         3.188415E-04	 
+  DELTA( 1)  -2.660241E-05	 
+  DELTA( 2)   1.650258E-06	 
+  DELTA( 3)  -2.933508E-08	 
+  SIGMA       1.546496E-05	
+
+             HALF LIFE     SIGMA H     CPM AT EOB     SIGMA EOB CPM    DECAY FACTOR 
+ COMP( 1)	   1.510 D	   0.073 D	   2.2107E+02	   7.4168E+00	   2.9309E+00
+
+
+    FIT =   1.233  ,  R-squared = 0.9994
+
+       T(I)            F(I)            FCALC(I)        V(I)            SIGMAF(I)        RATIO(I) 
+       3.3726E+03	   7.3600E+01	   7.5425E+01	  -1.8250E+00	   2.7148E+00	    -0.67
+       4.7995E+03	   4.9000E+01	   4.7854E+01	   1.1465E+00	   1.2785E+00	     0.90
+       6.5962E+03	   2.6500E+01	   2.6984E+01	  -4.8363E-01	   9.4045E-01	    -0.51

@@ -1,0 +1,38 @@
+Example 1 Pb-203 Bi-204 Bi-206 Au-194 At-207 Po-203
+Number of components or isotopes (NC):     5
+Number of unknown half-lives (NV):         1
+NCNV (leave set to 0, legacy code):        0
+Iteration stop criteria (CNV):             0.05  
+Background counts (BGD):                   0
+Background standard deviation (SBGD):      0
+Input format (IN), (IN=2 suggested):       2
+Matrix inversion verification (IT):        0
+Counter dead time in microseconds (BLOCK): 0
+Standard deviation cutoff percent (SCOFF): 0.5
+Bad point rejection criteria (RJT):        6.0
+Known component subtraction (set 0)(KCS):  0
+YIELD (leave set to 0, legacy code):       0
+# Below, input half-lives (in S, M, H, D, or Y with no space) for each component (NC), data for 1 component per line.
+38.02H
+11.22H
+51.92H
+6.243D
+1.81H
+End of bombardment reference time (EOB): 0.0M
+# Now input measured time and count data below.  As long as each time is on its own line and values are separated by at least one space, tab, or comma, spacing does not matter.
+# The first 3 columns are decay time from EOB in D, H, and M. The fourth column is counts and the fifth column is measurement time for each sample in minutes.
+# Days Hrs Min    Counts      Measurement time (minutes)
+0	7	0	3.77E+06	1
+0	10	0	1.51E+06	1
+0	16	0	4.94E+05	1
+0	22	0	3.32E+05	1
+1.2	0	0	2.64E+05	1
+1.4	0	0	2.31E+05	1
+1.8	0	0	1.82E+05	1
+2.3	0	0	1.41E+05	1
+3	0	0	1.02E+05	1
+4	0	0	6.86E+04	1
+5	0	0	4.74E+04	1
+8	0	0	1.73E+04	1
+12	0	0	5.60E+03	1
+20	0	0	1.25E+03	1

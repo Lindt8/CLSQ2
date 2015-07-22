@@ -1,0 +1,58 @@
+Output for: TH-232-2, TH-229-9, Pa-229 (119 keV), T6  
+
+CLSQ2 output creation time: 2015-07-20 11:50:54.948257
+
+ ----- INPUT DATA FROM FILE ----- 
+
+   DAY    HR     MIN       COUNTS      DELTA_T     BGND    SBGND    SIGPCT  TYPE-FWHM  ENERGY       ID1       ID2       CPM   
+    2	   8	  7.60	     2440	    10.0	   0.00	   0.00	     0.0	 	        0.0	 						    244.00
+    3	   7	 44.50	     4440	    30.0	   0.00	   0.00	     0.0	 	        0.0	 						    148.00
+    4	  13	 41.20	     2460	    30.0	   0.00	   0.00	     0.0	 	        0.0	 						     82.00
+    6	   4	 33.00	     5250	   120.0	   0.00	   0.00	     0.0	 	        0.0	 						     43.75
+
+
+ ----- START OF CALCULATED OUTPUT ----- 
+
+
+
+NP = 4 ,  NC = 1 ,  NV = 0 ,  CNV = 0.05 ,  BGD =   0.00 ,  SBGD =  0.00 ,  BLOCK =  5.0 ,  SCOFF = 0.5 ,  RJT =  6.0 ,  KCS = 0 ,  YIELD =  0.000 
+
+             HALF LIFE     SIGMA H     CPM AT EOB     SIGMA EOB CPM    DECAY FACTOR 
+ COMP( 1)	   1.550 D	   0.000 D	   6.7638E+02	   5.6057E+00	   2.8501E+00
+
+
+    FIT =   3.016  ,  R-squared = 0.9989
+
+       T(I)            F(I)            FCALC(I)        V(I)            SIGMAF(I)        RATIO(I) 
+       3.3726E+03	   2.4400E+02	   2.3732E+02	   6.6872E+00	   4.9406E+00	     1.35
+       4.7995E+03	   1.4800E+02	   1.5236E+02	  -4.3628E+00	   2.2214E+00	    -1.96
+       6.5962E+03	   8.2001E+01	   8.7209E+01	  -5.2088E+00	   1.6536E+00	    -3.15
+       8.9730E+03	   4.3750E+01	   4.1687E+01	   2.0628E+00	   6.0386E-01	     3.42
+
+ All data points okay. None meet rejection criteria. 
+
+
+
+NP = 4 ,  NC = 1 ,  NV = 1 ,  CNV = 0.05 ,  BGD =   0.00 ,  SBGD =  0.00 ,  BLOCK =  5.0 ,  SCOFF = 0.5 ,  RJT =  6.0 ,  KCS = 0 ,  YIELD =  0.000 
+
+Iterations performed =  3 ,     CONVERGENT 
+
+
+              1ST COMP        2ND COMP        3RD COMP        4TH COMP        5TH COMP 
+    D         3.011383E-04	 
+  DELTA( 1)  -9.422773E-06	 
+  DELTA( 2)   1.097202E-08	 
+  DELTA( 3)   2.937155E-10	 
+  SIGMA       3.922518E-06	
+
+             HALF LIFE     SIGMA H     CPM AT EOB     SIGMA EOB CPM    DECAY FACTOR 
+ COMP( 1)	   1.598 D	   0.021 D	   6.3742E+02	   5.3659E+00	   2.7611E+00
+
+
+    FIT =   3.293  ,  R-squared = 0.9976
+
+       T(I)            F(I)            FCALC(I)        V(I)            SIGMAF(I)        RATIO(I) 
+       3.3726E+03	   2.4400E+02	   2.3086E+02	   1.3146E+01	   4.9406E+00	     2.66
+       4.7995E+03	   1.4800E+02	   1.5022E+02	  -2.2203E+00	   2.2214E+00	    -1.00
+       6.5962E+03	   8.2001E+01	   8.7449E+01	  -5.4489E+00	   1.6536E+00	    -3.30
+       8.9730E+03	   4.3750E+01	   4.2748E+01	   1.0024E+00	   6.0386E-01	     1.66

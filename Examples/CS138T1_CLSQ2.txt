@@ -1,0 +1,29 @@
+TH-232, (p,alpha), cont count, Cs-138 (463 keV)   
+Number of components or isotopes (NC):     1
+Number of unknown half-lives (NV):         1
+NCNV (leave set to 0, legacy code):        0
+Iteration stop criteria (CNV):             0.05  
+Background counts (BGD):                   0
+Background standard deviation (SBGD):      0
+Input format (IN), (IN=2 suggested):       2
+Matrix inversion verification (IT):        0
+Counter dead time in microseconds (BLOCK): 5
+Standard deviation cutoff percent (SCOFF): 0.5
+Bad point rejection criteria (RJT):        6.0
+Known component subtraction (set 0)(KCS):  0
+YIELD (leave set to 0, legacy code):       0
+# Below, input half lives (in S, M, H, D, or Y with no space) for each NC, with 1 value per line.
+33.41M  
+End of bombardment reference time (EOB): 0.0M
+# Now input measured time and count data below.  As long as each time is on its own line and values are separated by at least one space, tab, or comma, spacing does not matter.
+# The first 3 columns are decay time from EOB in D, H, and M. The fourth column is counts and the fifth column is measurement time for each sample in minutes.
+# Days Hrs Min    Counts      Measurement time (minutes)
+    0  1  0.9  2.70E3    10
+    0  1 11.3  1.93E3    10
+    0  1 21.6  1.80E3    10
+    0  1 42.3  1.07E3    10
+    0  1 52.6  6.83E2    10
+    0  2 13.1  4.36E2    10
+    0  2 23.3  3.99E2    10
+    0  2 36.6  1.10E3    30
+    0  3  7.2  6.49E2    30

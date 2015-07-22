@@ -1,0 +1,10 @@
+See the CLSQ2 Documentation for more details regarding the .exe creation.
+
+Simply put, if you have installed all of the libraries needed to run the code and py2exe, 
+creating the .exe should be as simple as navigating to the folder containing both
+setup.py and CLSQ2.py in the command window and typing: 
+
+python setup.py
+
+This should automatically run py2exe on the CLSQ2 code.  A "dist" folder should be created.
+It will contain the .exe and all of the files that MUST be kept together for the executable to work.
