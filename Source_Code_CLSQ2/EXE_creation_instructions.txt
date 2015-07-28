@@ -1,6 +1,6 @@
 See the CLSQ2 Documentation for more details regarding the .exe creation.
 
-Simply put, if you have installed all of the libraries needed to run the code and py2exe, 
+Simply put, if you have installed all of the libraries needed to run the code and py2exe (or py2app on Mac), 
 creating the .exe should be as simple as navigating to the folder containing both
 setup.py and CLSQ2.py in the command window and typing: 
 
