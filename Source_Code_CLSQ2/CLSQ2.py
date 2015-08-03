@@ -10,6 +10,7 @@ import sys
 import datetime
 import re
 import numpy as np
+import ctypes
 from tkinter import filedialog, Tk
 
 """
@@ -83,7 +84,7 @@ if print_errors_to_file == 1: sys.stderr = open(error_log_filename, 'w')
 
 f = open(output_filename,"w+")
 
-size_limit_small = 22  # Default limit for number of components
+size_limit_small = 22  # Default limit for number of components + 2
 size_limit_large = 200 # Default limit for number of data points
 iteration_limit = 20 # Default limit for iterating
 
@@ -100,6 +101,7 @@ TBOMT= []
 days = []
 hours = []
 minutes = []
+date = []
 counts = []
 count_time = []
 BGND = []
@@ -110,6 +112,24 @@ EP = []
 IDENT_1 = []
 EOB=""
 
+# Input file debugging functions
+
+def check_for_colon(i, line):
+    if ":" in line.rsplit(None, 1)[1]:
+        ctypes.windll.user32.MessageBoxW(0, "Place space between colon and entry on line number " + str(i+1) + " of input file.", "Input Error", 0)
+        f.write("Error: Place space between colon and entry on line number " + str(i+1) + " of input file.")
+
+def check_for_time_units(i, line):
+    temp_text = ((str(re.split(r'[;,\s]\s*', line.strip())[0])))
+    time_units = set("sSmMhHdDyY")
+    if not any(substring in temp_text for substring in time_units): 
+        ctypes.windll.user32.MessageBoxW(0, "Error: Make sure there is no space between number and time character in line " + str(i+1) + " of input file.", "Input Error", 0)
+        f.write("Error: Make sure there is no space between number and time character in line " + str(i+1) + " of input file.")
+
+
+num_time_entries = 3 # number of time entries, default of 3 = D H M format
+
+# Read in input file
 
 fp = open(path_to_input)
 for i, line in enumerate(fp):
@@ -118,36 +138,47 @@ for i, line in enumerate(fp):
         top_comment = line
     elif i == 1:
         # 2nd line
+        check_for_colon(i, line)
         NC = (int(line.rsplit(None, 1)[1])) # Number of components
     elif i == 2:
         # 3rd line
+        check_for_colon(i, line)
         NV = (int(line.rsplit(None, 1)[1])) # Number of unknown half-lives
     elif i == 3:
         # 4th line
+        check_for_colon(i, line)
         NCNV = (int(line.rsplit(None, 1)[1]))    
     elif i == 4:
         # 5th line
+        check_for_colon(i, line)
         CNV = (float(line.rsplit(None, 1)[1])) # Iteration stop condition (ratio: change in decay constant divided by standard deviation of decay constant)
     elif i == 5:
         # 6th line
+        check_for_colon(i, line)
         BGD = (float(line.rsplit(None, 1)[1]))
     elif i == 6:
         # 7th line
+        check_for_colon(i, line)
         SBGD = (float(line.rsplit(None, 1)[1]))
     elif i == 7:
         # 8th line
+        check_for_colon(i, line)
         IN = (int(line.rsplit(None, 1)[1]))
     elif i == 8:
         # 9th line
+        check_for_colon(i, line)
         IT = (int(line.rsplit(None, 1)[1]))
     elif i == 9:
         # 10th line
+        check_for_colon(i, line)
         BLOCK = (float(line.rsplit(None, 1)[1]))
     elif i == 10:
         # 11th line
+        check_for_colon(i, line)
         SCOFF = (float(line.rsplit(None, 1)[1]))
     elif i == 11:
         # 12th line
+        check_for_colon(i, line)
         RJT = (float(line.rsplit(None, 1)[1]))
     elif i == 12:
         # 13th line
@@ -175,6 +206,7 @@ for i, line in enumerate(fp):
         HL.append(0.0)
         CEF.append(0.0)
         TBOMT.append(0.0)
+        check_for_time_units(i, line)
         H[i-15] = ((str(re.split(r'[;,\s]\s*', line.strip())[0])))
         if len(re.split(r'[;,\s]\s*', line.strip())) > 1:
             HL[i-15] = ((str(re.split(r'[;,\s]\s*', line.strip())[1])))
@@ -183,31 +215,88 @@ for i, line in enumerate(fp):
         if len(re.split(r'[;,\s]\s*', line.strip())) > 3:
             TBOMT[i-15] = ((float(re.split(r'[;,\s]\s*', line.strip())[3])))
     elif i == 15+NC:
-        EOB = (str(line.rsplit(None, 1)[1]))
+        # Need to determine the time syntax being used
+        temp_line = line.split(':', 1)[-1].strip()   # obtain everything right of first colon
+        
+        # Determine what syntax is being used
+        time_syntax = 0
+        date_info = 0
+        time_info = 0
+        # 0 = raw number in minutes (default)
+        # 1 = 0.0D "standard time input"
+        # 2 = MM/DD/YY
+        # 3 = MM/DD/YY HH:MM
+        # 4 = MM/DD/YY HH:MM:SS
+
+        
+        time_units = set("sSmMhHdDyY")
+        if any(substring in temp_line for substring in time_units):
+            # Time is given in standard format
+            EOB = (str(line.rsplit(None, 1)[1])) 
+            time_syntax = 1           
+                    
+        if "/" in temp_line and ":" in temp_line:
+            # Date mode with hours and minutes.  Determine if seconds used too
+            if temp_line.count(":") == 1:
+                temp_line = re.split(r'[;,\s]\s*', temp_line)  # turn temp_line into a list containing the time pieces
+                temp_line = temp_line[0] + " " + temp_line[1]  # reformat it in an exact way
+                # minutes only
+                time_syntax = 3
+                num_time_entries = 2
+                EOB_date = datetime.datetime.strptime(temp_line, "%m/%d/%Y %H:%M")
+            elif temp_line.count(":") == 2:
+                temp_line = re.split(r'[;,\s]\s*', temp_line)  # turn temp_line into a list containing the time pieces
+                temp_line = temp_line[0] + " " + temp_line[1]  # reformat it in an exact way
+                # minutes and seconds
+                time_syntax = 4
+                num_time_entries = 2
+                EOB_date = datetime.datetime.strptime(temp_line, "%m/%d/%Y %H:%M:%S")
+                
+        elif "/" in temp_line:
+            # Date only
+            temp_line = re.split(r'[;,\s]\s*', temp_line)  # turn temp_line into a list containing the time pieces
+            time_syntax = 2
+            num_time_entries = 1
+            EOB_date = datetime.datetime.strptime(temp_line[0], "%m/%d/%Y")
+        
+        if time_syntax == 0:
+            EOB = (float(line.rsplit(None, 1)[1])) 
+        
+        
     elif i >= 15+NC+4 and line.strip() != "" :
-        days.append((float(re.split(r'[;,\s]\s*', line.strip())[0])))
-        hours.append((float(re.split(r'[;,\s]\s*',line.strip())[1])))
-        minutes.append((float(re.split(r'[;,\s]\s*',line.strip())[2])))
-        counts.append((float(re.split(r'[;,\s]\s*',line.strip())[3])))
-        count_time.append((float(re.split(r'[;,\s]\s*',line.strip())[4])))
+        if time_syntax == 0 or time_syntax == 1:
+            days.append((float(re.split(r'[;,\s]\s*', line.strip())[0])))
+            hours.append((float(re.split(r'[;,\s]\s*',line.strip())[1])))
+            minutes.append((float(re.split(r'[;,\s]\s*',line.strip())[2])))
+        elif time_syntax == 2:
+            date.append(datetime.datetime.strptime(re.split(r'[;,\s]\s*',line.strip())[0], "%m/%d/%Y"))
+        elif time_syntax == 3:
+            temp_date = re.split(r'[;,\s]\s*',line.strip())[0] + " " + re.split(r'[;,\s]\s*',line.strip())[1]
+            date.append(datetime.datetime.strptime(temp_date, "%m/%d/%Y %H:%M"))
+        elif time_syntax == 4:
+            temp_date = re.split(r'[;,\s]\s*',line.strip())[0] + " " + re.split(r'[;,\s]\s*',line.strip())[1]
+            date.append(datetime.datetime.strptime(temp_date, "%m/%d/%Y %H:%M:%S"))
+        
+        counts.append((float(re.split(r'[;,\s]\s*',line.strip())[num_time_entries])))
+        count_time.append((float(re.split(r'[;,\s]\s*',line.strip())[num_time_entries + 1])))
         BGND.append(0.0)
         SBGND.append(0.0)
         SIGPCT.append(0.0)
         TYPE_1.append("")
         EP.append(0.0)
         IDENT_1.append("")
-        if len(re.split(r'[;,\s]\s*', line.strip())) > 5:
-            BGND[i-(15+NC+4)] = ((float(re.split(r'[;,\s]\s*',line.strip())[5])))
-        if len(re.split(r'[;,\s]\s*', line.strip())) > 6:
-            SBGND[i-(15+NC+4)] = ((float(re.split(r'[;,\s]\s*',line.strip())[6])))
-        if len(re.split(r'[;,\s]\s*', line.strip())) > 7:
-            SIGPCT[i-(15+NC+4)] = ((float(re.split(r'[;,\s]\s*',line.strip())[7])))
-        if len(re.split(r'[;,\s]\s*', line.strip())) > 8:
-            TYPE_1[i-(15+NC+4)] = (((re.split(r'[;,\s]\s*',line.strip())[8])))
-        if len(re.split(r'[;,\s]\s*', line.strip())) > 9:
-            EP[i-(15+NC+4)] = ((float(re.split(r'[;,\s]\s*',line.strip())[9])))
-        if len(re.split(r'[;,\s]\s*', line.strip())) > 10:
-            IDENT_1[i-(15+NC+4)] = (((re.split(r'[;,\s]\s*',line.strip())[10])))
+        if len(re.split(r'[;,\s]\s*', line.strip())) > num_time_entries + 2:
+            BGND[i-(15+NC+4)] = ((float(re.split(r'[;,\s]\s*',line.strip())[num_time_entries + 2])))
+        if len(re.split(r'[;,\s]\s*', line.strip())) > num_time_entries + 3:
+            SBGND[i-(15+NC+4)] = ((float(re.split(r'[;,\s]\s*',line.strip())[num_time_entries + 3])))
+        if len(re.split(r'[;,\s]\s*', line.strip())) > num_time_entries + 4:
+            SIGPCT[i-(15+NC+4)] = ((float(re.split(r'[;,\s]\s*',line.strip())[num_time_entries + 4])))
+        if len(re.split(r'[;,\s]\s*', line.strip())) > num_time_entries + 5:
+            TYPE_1[i-(15+NC+4)] = (((re.split(r'[;,\s]\s*',line.strip())[num_time_entries + 5])))
+        if len(re.split(r'[;,\s]\s*', line.strip())) > num_time_entries + 6:
+            EP[i-(15+NC+4)] = ((float(re.split(r'[;,\s]\s*',line.strip())[num_time_entries + 6])))
+        if len(re.split(r'[;,\s]\s*', line.strip())) > num_time_entries + 7:
+            IDENT_1[i-(15+NC+4)] = (((re.split(r'[;,\s]\s*',line.strip())[num_time_entries + 7])))
 fp.close()
 
 
@@ -216,8 +305,8 @@ if (NC+NV) > size_limit_small :
     size_limit_small = NC + NV  # Default limit for number of components
     iteration_limit = size_limit_small + 2
 
-if len(days) > size_limit_large :
-    size_limit_large = len(days) + 10 # Default limit for number of data points
+if len(counts) > size_limit_large :
+    size_limit_large = len(counts) + 10 # Default limit for number of data points
 
 
 '''
@@ -279,26 +368,31 @@ for i in range(len(HL)):
             HL_num.append(raw_number*60*24*365.25)
         DL.append(math.log(2)/HL_num[i])
      
-# End of Bombardment time
-EOB_raw_number = float(EOB[:-1])
-if EOB.endswith('S') or EOB.endswith('s'):
-    EOB_min = (EOB_raw_number/60)
-elif EOB.endswith('M') or EOB.endswith('m'):
-    EOB_min = (EOB_raw_number)
-elif EOB.endswith('H') or EOB.endswith('h'):
-    EOB_min = (EOB_raw_number*60)
-elif EOB.endswith('D') or EOB.endswith('d'):
-    EOB_min = (EOB_raw_number*60*24)
-elif EOB.endswith('Y') or EOB.endswith('y'):
-    EOB_min = (EOB_raw_number*60*24*365.25)
-if debug_mode == 1 : print("EOB (minutes) = ", EOB_min)
+# End of Bombardment time conversion 
+if time_syntax == 0:
+    EOB_min = EOB
+elif time_syntax == 1:
+    EOB_raw_number = float(EOB[:-1])
+    if EOB.endswith('S') or EOB.endswith('s'):
+        EOB_min = (EOB_raw_number/60)
+    elif EOB.endswith('M') or EOB.endswith('m'):
+        EOB_min = (EOB_raw_number)
+    elif EOB.endswith('H') or EOB.endswith('h'):
+        EOB_min = (EOB_raw_number*60)
+    elif EOB.endswith('D') or EOB.endswith('d'):
+        EOB_min = (EOB_raw_number*60*24)
+    elif EOB.endswith('Y') or EOB.endswith('y'):
+        EOB_min = (EOB_raw_number*60*24*365.25)
+    if debug_mode == 1 : print("EOB (minutes) = ", EOB_min)
+
 # Do all math and conversions for count and time data
 time_min = []
 #decay_constant = []
 CPM=[]  # counts per minute
-for i in range(len(days)):
+for i in range(len(counts)):
     # Time data for measurements
-    time_min.append(minutes[i]+(60*hours[i])+(24*60*days[i])+(count_time[i]/2))
+    if time_syntax == 0 or time_syntax == 1:
+        time_min.append(minutes[i]+(60*hours[i])+(24*60*days[i])+(count_time[i]/2))
     # Calculate decay constants (lambda)
     #decay_constant.append(math.log(2)/time_min[i])
     # Convert count data to counts per minute
@@ -316,7 +410,10 @@ f.write("Output for: " +top_comment + "\n")
 f.write("CLSQ2 output creation time: " + str(datetime.datetime.now()) + "\n")
 # Column headings for output file
 f.write('\n ----- INPUT DATA FROM FILE ----- \n\n')
-f.write('   DAY    HR     MIN       COUNTS      DELTA_T     BGND    SBGND    SIGPCT  TYPE-FWHM  ENERGY       ID1       ID2       CPM   \n')
+if time_syntax == 0 or time_syntax == 1:
+    f.write('   DAY    HR       MIN     COUNTS        DELTA_T           BGND   SBGND   SIGPCT               CPM      TYPE-FWHM  ENERGY       ID1       ID2  \n')
+elif time_syntax >= 2 or time_syntax <= 4:
+    f.write('          DATE/TIME        COUNTS        DELTA_T           BGND   SBGND   SIGPCT               CPM      TYPE-FWHM  ENERGY       ID1       ID2  \n')
 
 # Translation of CLSQ code
 # This looks messy because the original code was messy and this is just a translation of it.
@@ -364,7 +461,7 @@ F = CPM_np.copy()  # background corrected counts
 SFSQ = np.zeros(int(size_limit_large+1))
 
 # Calculations done while data was read in.
-for i in range(len(days)):
+for i in range(len(counts)):
     if IN == 1:
         # NP = NP + 1
         print("Other input formats not supported. IN variable will be set to 2.")
@@ -375,7 +472,10 @@ for i in range(len(days)):
     
     if IN >= 2:
         # Format the columns in the output that restate the input
-        line_text = "{0:5.0f}\t{1:4.0f}\t{2:6.2f}\t{3:9.0f}\t{4:8.1f}\t{5:7.2f}\t{6:7.2f}\t{7:8.1F}\t{8:1s}\t   {9:8.1f}\t{10:1s}\t\t\t\t\t\t{11:10.2f}\n".format(days[i],hours[i],minutes[i],counts[i],count_time[i],float(BGND[i]),float(SBGND[i]),float(SIGPCT[i]),TYPE_1[i],float(EP[i]),IDENT_1[i],CPM[i])
+        if time_syntax == 0 or time_syntax == 1:
+            line_text = "{0:5.0f}\t{1:4.0f}\t{2:6.2f}\t{3:9.0f}\t{4:8.1f}\t{5:7.2f}\t{6:7.2f}\t{7:8.1F}\t{8:10.2f}\t{9: <8} {10:8.1f} {11: <8}\n".format(days[i],hours[i],minutes[i],counts[i],count_time[i],float(BGND[i]),float(SBGND[i]),float(SIGPCT[i]),CPM[i],TYPE_1[i],float(EP[i]),IDENT_1[i])
+        elif time_syntax >= 2 or time_syntax <= 4:
+            line_text = "{0:s}\t{1:9.0f}\t{2:8.1f}\t{3:7.2f}\t{4:7.2f}\t{5:8.1F}\t{6:10.2f}\t{7: <8} {8:8.1f} {9: <8}\n".format(str(date[i]),counts[i],count_time[i],float(BGND[i]),float(SBGND[i]),float(SIGPCT[i]),CPM[i],TYPE_1[i],float(EP[i]),IDENT_1[i])
         f.write(line_text)
         NP = NP + 1
         
@@ -394,12 +494,18 @@ for i in range(len(days)):
 f.write("\n\n ----- START OF CALCULATED OUTPUT ----- \n")
 
 # Time normalization
-T0 = EOB_min  # set initial time to end of bombardment
 time_adjusted = []
-for i in range(NP):
-    time_adjusted.append(time_min[i]-EOB_min)
-
-T0 = time_adjusted[0]  # initial time should be amount of time passed between EOB and 1st measurement
+if time_syntax == 0 or time_syntax == 1:
+    T0 = EOB_min  # set initial time to end of bombardment
+    for i in range(NP):
+        time_adjusted.append(time_min[i]-EOB_min)
+    
+    T0 = time_adjusted[0]  # initial time should be amount of time passed between EOB and 1st measurement
+elif time_syntax >= 2 or time_syntax <= 4 :
+    for i in range(NP):
+        temp_seconds = (date[i] - EOB_date).total_seconds()
+        time_adjusted.append(temp_seconds/60)
+    T0 = time_adjusted[0]  # initial time should be amount of time passed between EOB and 1st measurement
 
 # Dead time correction
 if BLOCK != 0:
@@ -730,7 +836,7 @@ while master_loop_criteria == 1:
             f.write("Tried to take square root of {0:12.4f}.  Since it was negative, absolute value was taken. \n Therefore, DO NOT TRUST THESE RESULTS!\n".format(SXEOB[i]))
             SXEOB[i] = math.sqrt(abs(SXEOB[i]))*EXPDTO[i]
         
-    f.write("             HALF LIFE     SIGMA H     CPM AT EOB     SIGMA EOB CPM    DECAY FACTOR \n")
+    f.write("                 HALF LIFE         SIGMA H         CPM AT EOB     SIGMA EOB CPM    DECAY FACTOR \n")
     for i in range(NC):
         if NV < 0:
             time_char = "M"
@@ -803,7 +909,7 @@ while master_loop_criteria == 1:
     f.write("    FIT = {0:7.3f}  ,  R-squared = {1:6.4f}\n".format(FIT,R_squared))
     f.write("\n")
     
-    f.write("       T(I)            F(I)            FCALC(I)        V(I)            SIGMAF(I)        RATIO(I) \n")
+    f.write("          T(I)                F(I)           FCALC(I)         V(I)          SIGMAF(I)       RATIO(I)  \n")
     for i in range(NP):
         f.write("    {0:13.4E}\t{1:13.4E}\t{2:13.4E}\t{3:13.4E}\t{4:13.4E}\t{5:9.2f}\n".format(time_adjusted[i], F[i], FCALC[i], V[i], SF[i], RATIO_1[i]))
     
