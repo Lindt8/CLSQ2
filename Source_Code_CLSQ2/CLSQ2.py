@@ -68,7 +68,7 @@ debug_mode = 0  # 1 = on, 0 = off
 
 # Read in from text file.
 Tk().withdraw() # we don't want a full GUI, so keep the root window from appearing
-path_to_input = filedialog.askopenfilename() # show an "Open" dialog box and return the path to the selected file, initialdir="C:\CLSQ\CLSQ2"
+path_to_input = filedialog.askopenfilename(title="Select input file") # show an "Open" dialog box and return the path to the selected file, initialdir="C:\CLSQ\CLSQ2"
 
 # If not using tkinter:
 #path_to_input = input("\nPlease enter the input filename with extension and press Enter.\n\n")
