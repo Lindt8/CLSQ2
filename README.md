@@ -4,24 +4,24 @@ See the CLSQ2 Documentation file within the Documentation folder for detailed co
 
 CLSQ2 should be distributed as a single ZIP file.  Extract the files to a single folder.  When unpacked, the file structure should appear as shown below. 
 
-    - CLSQ2 
-        - README.txt
-        - Documentation
-            - CLSQ2 Documentation 
-            - J. B. Cumming Paper
-        - Executable_CLSQ2
-            - CLSQ2.exe
-            - *.dll (4 files)
-            - tcl (folder)
-        - Source_Code_CLSQ2
-            - CLSQ2.py	
-            - setup.py
-        - Examples
-        - Original_CLSQ
-            - CLSQ.exe
-            - CLSQ.FOR
-            - Input_guide.pdf
-            - Examples (folder)
+    CLSQ2 
+        README.txt
+        Documentation
+            CLSQ2 Documentation 
+            J. B. Cumming Paper
+        Executable_CLSQ2
+            CLSQ2.exe
+            *.dll (4 files)
+            tcl (folder)
+        Source_Code_CLSQ2
+            CLSQ2.py	
+            setup.py
+        Examples
+        Original_CLSQ
+            CLSQ.exe
+            CLSQ.FOR
+            Input_guide.pdf
+            Examples (folder)
 
 It is advised that all of these files be kept together.  The only true requirement though is that all of the “.dll” files and the “tcl” folder within the “Executable_CLSQ2” folder must stay together with the “.exe” file for the executable to work.  Feel free to make a shortcut to the executable and place it somewhere more convenient.  
 
