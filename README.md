@@ -1,5 +1,10 @@
 # CLSQ2
 
+### Cumming’s Least Squares (version 2)
+This is a modernized version of the 1962 Cumming’s Least Squares (CLSQ) Brookhaven Decay Curve Analysis Program, written in FORTRAN IV.  The original paper on it can be read [<u>here</u>](https://books.google.com/books?id=DZQrAAAAYAAJ&lpg=PR1&pg=PA25#v=onepage&q&f=false). CLSQ analyzes multicomponent decay curves by a least-squares procedure to iteratively identify the half-lives and abundances of the individual isotopes of a measured sample.  Its use at Oak Ridge National Laboratory (ORNL) had been limited to a few very old computers due to its age and recompilation issues; only a 16-bit compiled version of the code was in use at ORNL.  To make this code more accessible, it has been translated the original code from FORTRAN IV into Python 3.  Additionally, the input and output functionalities of CLSQ have been improved, making it more user-friendly.  
+
+### Instructions
+
 See the CLSQ2 Documentation file within the Documentation folder for detailed coverage of CLSQ2.
 
 CLSQ2 should be distributed as a single ZIP file.  Extract the files to a single folder.  When unpacked, the file structure should appear as shown below. 
