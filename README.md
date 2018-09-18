@@ -2,7 +2,7 @@
 
 See the CLSQ2 Documentation file within the Documentation folder for detailed coverage of CLSQ2.
 
-CLSQ2 should be distributed as a single ZIP file.  Extract the files to a single folder.  When unpacked, the file structure should appear as shown below. ::
+CLSQ2 should be distributed as a single ZIP file.  Extract the files to a single folder.  When unpacked, the file structure should appear as shown below. 
 
     - CLSQ2 
         - README.txt
